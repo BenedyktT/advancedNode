@@ -1,17 +1,21 @@
 const Page = require("../helpers/page");
 let page;
+beforeEach(async () => {
+  page = await Page.build();
+  await page.goto("http://localhost:3000");
+});
+
+afterEach(async () => {
+  await page.close();
+});
+
+jest.setTimeout(30000);
 
 describe("integration test of blog components when logged in", () => {
   beforeEach(async () => {
-    page = await Page.build();
-    await page.goto("http://localhost:3000");
     await page.login();
     await page.click(".right>li>a");
     await page.click("a[href='/blogs/new']");
-  });
-
-  afterEach(async () => {
-    await page.close();
   });
 
   test("should redirect to blogs after clicking nav element", async () => {
@@ -65,4 +69,26 @@ describe("integration test of blog components when logged in", () => {
   });
 });
 
-describe("integration test of blog component when NOT logged in", () => {});
+describe.only("integration test of blog component when NOT logged in", () => {
+  const actions = [
+    {
+      method: "get",
+      url: "/api/blogs",
+      comment: "User cannot create blog post",
+    },
+    {
+      method: "post",
+      url: "/api/blogs",
+      comment: "User cannot list blogs when not logged in",
+      data: {
+        title: "T",
+        content: "C",
+      },
+    },
+  ];
+
+  test("interaction with blogs while not logged in", async () => {
+    const results = await page.execRequests(actions);
+    results.forEach((e) => expect(e.error).toEqual("You must log in!"));
+  });
+});

@@ -28,5 +28,36 @@ class CustomPage {
   text(selector) {
     return this.page.$eval(selector, (el) => el.innerHTML);
   }
+  get(url) {
+    return this.page.evaluate((_url) => {
+      return fetch(_url, {
+        method: "GET",
+        credentials: "same-origin",
+      }).then((res) => res.json());
+    }, url);
+  }
+  post(url, data) {
+    return this.page.evaluate(
+      (_url, _data) => {
+        return fetch(_url, {
+          method: "POST",
+          credentials: "same-origin",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(_data),
+        }).then((res) => res.json());
+      },
+      url,
+      data
+    );
+  }
+  execRequests(actions) {
+    return Promise.all(
+      actions.map(({ method, url, data }) => {
+        return this[method](url, data);
+      })
+    );
+  }
 }
 module.exports = CustomPage;
