@@ -6,17 +6,19 @@ const passport = require("passport");
 const bodyParser = require("body-parser");
 const keys = require("./config/keys");
 const path = require("path");
+const getConnection = require("./tests/setup");
 
 require("./models/User");
 require("./models/Blog");
 require("./services/passport");
 require("./services/cache");
 mongoose.Promise = global.Promise;
+
 mongoose.connect(keys.mongoURI, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
   useCreateIndex: true,
-  useFindAndModify: false
+  useFindAndModify: false,
 });
 
 const app = express();
@@ -25,7 +27,7 @@ app.use(bodyParser.json());
 app.use(
   cookieSession({
     maxAge: 30 * 24 * 60 * 60 * 1000,
-    keys: [keys.cookieKey]
+    keys: [keys.cookieKey],
   })
 );
 app.use(passport.initialize());
