@@ -1,4 +1,5 @@
 const Page = require("../helpers/page");
+const close = require("../setup");
 let page;
 beforeEach(async () => {
   page = await Page.build();
@@ -7,6 +8,9 @@ beforeEach(async () => {
 
 afterEach(async () => {
   await page.close();
+});
+afterAll(async () => {
+  await close();
 });
 
 jest.setTimeout(30000);

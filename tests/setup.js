@@ -7,3 +7,7 @@ mongoose.connect(keys.mongoURI, {
   useUnifiedTopology: true,
   useNewUrlParser: true,
 });
+
+module.exports = () => {
+  return mongoose.connection.close();
+};
