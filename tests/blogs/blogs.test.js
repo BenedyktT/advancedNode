@@ -69,7 +69,7 @@ describe("integration test of blog components when logged in", () => {
   });
 });
 
-describe.only("integration test of blog component when NOT logged in", () => {
+describe("integration test of blog component when NOT logged in", () => {
   const actions = [
     {
       method: "get",
