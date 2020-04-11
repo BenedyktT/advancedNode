@@ -1,3 +1,4 @@
+require("dotenv").config();
 module.exports = {
   googleClientID:
     "964808011168-29vqsooppd769hk90kjbjm5gld0glssb.apps.googleusercontent.com",
