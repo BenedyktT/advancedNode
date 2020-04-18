@@ -1,15 +1,24 @@
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import { fetchBlog } from '../../actions';
+import React, { Component } from "react";
+import { connect } from "react-redux";
+import { fetchBlog } from "../../actions";
 
 class BlogShow extends Component {
   componentDidMount() {
     this.props.fetchBlog(this.props.match.params._id);
   }
-
+  renderImage() {
+    if (this.props.blog.imageUrl) {
+      console.log(this.props.blog.imageUrl);
+      return (
+        <img
+          src={`https://advancednodetutorial.s3-eu-west-1.amazonaws.com/${this.props.blog.imageUrl}`}
+        />
+      );
+    } else return null;
+  }
   render() {
     if (!this.props.blog) {
-      return '';
+      return "";
     }
 
     const { title, content } = this.props.blog;
@@ -18,6 +27,7 @@ class BlogShow extends Component {
       <div>
         <h3>{title}</h3>
         <p>{content}</p>
+        {this.renderImage()}
       </div>
     );
   }
